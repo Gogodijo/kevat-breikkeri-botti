@@ -2,10 +2,10 @@ const handleMessage = async (msg) => {
   console.time("command")
   const commandArr = msg.content.split(" ")
   if (commandArr[0] !== "!sd") return
-   if(!parseCommand(commandArr[1])){
-     msg.reply('En ymmärrä =( ')
-     return
-   } 
+  if (!parseCommand(commandArr[1])) {
+    msg.reply('En ymmärrä =( ')
+    return
+  }
   if (inProgress) {
     msg.reply('Aikaisempi sessio vielä käynnissä. Tai sitten olen rikki =(')
     return
@@ -24,40 +24,40 @@ const handleMessage = async (msg) => {
     if (channel.type == 'voice' && channel.name.toLowerCase() == 'speed dating') {
       mainChannel = channel
     }
-    if(channel.type == 'text' && channel.name.toLowerCase() == 'speed-dating'){
+    if (channel.type == 'text' && channel.name.toLowerCase() == 'speed-dating') {
       textChannel = channel
     }
   })
   mainChannel.members.forEach(member => {
     usersInChannel.push(member)
   })
-  try{
-     if (voiceChannels.length == 0) {
-    const newChannel = await msg.guild.channels.create('sd huone', {
-      type: 'voice',
-      userLimit: 2,
-      parent: mainChannel.parentID
-    })
-    voiceChannels.push(newChannel)
-  }
-  if ((Math.floor(usersInChannel.length / 2) > voiceChannels.length)) {
-    let promiseArray = []
-    textChannel.send("Luodaan kanaat. Tässä saattaa kestää hetki")
-    const neededChannels = Math.floor(usersInChannel.length / 2) - voiceChannels.length
-    //const neededChannels = 25
-    for (let i = 0; i < neededChannels; i++) {
-      promiseArray.push(voiceChannels[0].clone())
+  try {
+    if (voiceChannels.length == 0) {
+      const newChannel = await msg.guild.channels.create('sd huone', {
+        type: 'voice',
+        userLimit: 2,
+        parent: mainChannel.parentID
+      })
+      voiceChannels.push(newChannel)
     }
-    const newChannels = await Promise.all(promiseArray)
-    voiceChannels.push(...newChannels)
+    if ((Math.floor(usersInChannel.length / 2) > voiceChannels.length)) {
+      let promiseArray = []
+      textChannel.send("Luodaan kanaat. Tässä saattaa kestää hetki")
+      const neededChannels = Math.floor(usersInChannel.length / 2) - voiceChannels.length
+      //const neededChannels = 25
+      for (let i = 0; i < neededChannels; i++) {
+        promiseArray.push(voiceChannels[0].clone())
+      }
+      const newChannels = await Promise.all(promiseArray)
+      voiceChannels.push(...newChannels)
+    }
   }
-  }
-  catch (e){
-    console.log("Virhe luodessa kanavia: " , e)
+  catch (e) {
+    console.log("Virhe luodessa kanavia: ", e)
     msg.reply("Jotain meni vikaan kanavia luodessa.")
   }
   // Jos ei löydä yhtään sopivaa kanavaa, luodaan yksi. Ohjelma osaa kopioida tästä tarvittavan määrän kanavia
- 
+
   msg.reply(`${usersInChannel.length} käyttäjää kanavalla. ${voiceChannels.length} huonetta käytössä. Aikaa annettu ${time} sekuntia`)
   textChannel.send(`Siirretään ihmiset oikeille kanaville.`)
   console.log(usersInChannel.length)
@@ -83,10 +83,10 @@ pareja ei voida enää muodostaa. Siihen voisi tehdä jonkun tarkastuksen, että
 tehdä uusia pareja vai ei niin ei turhaan kutsuta O(n^4) funktiota 4000 kertaa :D
 */
 const usersToChannels = (voiceChannels, usersInChannel) => {
-  if(usersInChannel.length % 2 !== 0 && usersInChannel.length > 2) {
-    const index = Math.floor(Math.random() * usersInChannel.length )
+  if (usersInChannel.length % 2 !== 0 && usersInChannel.length > 2) {
+    const index = Math.floor(Math.random() * usersInChannel.length)
     const leftoutUser = usersInChannel[index]
-    usersInChannel.splice(index,1)
+    usersInChannel.splice(index, 1)
     leftoutUser.voice.setChannel(voiceChannels[0])
   }
   for (let i = 0; i <= 4000; i++) {
@@ -118,21 +118,17 @@ const isUniquePairs = (shuffeledUsers) => {
   for (let i = 0; i < shuffeledUsers.length; i++) {
     for (let j = 0; j < previousPairs.length; j++) {
       for (let k = 0; k < previousPairs[j].length; k++) {
-        try {
-          if (i % 2 == 0) {
-            if (shuffeledUsers[i].user.id == previousPairs[j][k].user.id) {
-              if (shuffeledUsers[i + 1].user.id == previousPairs[j][k + 1].user.id && k % 2 == 0) {
-                return false
-              }
-            }
-            if (shuffeledUsers[i].user.id == previousPairs[j][k + 1].user.id) {
-              if (shuffeledUsers[i + 1].user.id == previousPairs[j][k].user.id && k % 2 != 1) {
-                return false
-              }
+        if (i % 2 == 0) {
+          if (shuffeledUsers[i].user.id == previousPairs[j][k].user.id) {
+            if (shuffeledUsers[i + 1].user.id == previousPairs[j][k + 1].user.id && k % 2 == 0) {
+              return false
             }
           }
-        }
-        catch {
+          if (shuffeledUsers[i].user.id == previousPairs[j][k + 1].user.id) {
+            if (shuffeledUsers[i + 1].user.id == previousPairs[j][k].user.id && k % 2 != 1) {
+              return false
+            }
+          }
         }
       }
     }
@@ -179,7 +175,7 @@ const parseCommand = (cmd) => {
 const destroyChannels = async (msg) => {
   let voiceChannels = []
   let textChannel = msg.channel
-  if(inProgress){
+  if (inProgress) {
     msg.reply("Ei pysty")
   }
   inProgress = true
