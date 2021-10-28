@@ -7,7 +7,7 @@ const roles = require("./roles")
 const moveFrom = require("./moveFrom")
 const info = require('./info')
 const roleByReaction = require('./roleByReaction')
-const voice = require('./recordvoice')
+
 const moveChannel = require('./moveChannel')
 
 global.inProgress = false
@@ -18,6 +18,7 @@ client.once('ready', () => {
 })
 
 client.on('message', async message => {
+
   if (message.member.roles.cache.some(role => role.name.toLowerCase() === 'tuo hallitus')){
   if (message.content.startsWith("!") ) {
     if (message.content.split(" ")[0].toLowerCase() == "!sd") {
@@ -33,7 +34,7 @@ client.on('message', async message => {
       return
     }
     if(message.content.toLowerCase() == "!startti") {
-     // startti.startti(message)
+      startti.startti(message)
       return
     }
     if(message.content.split(" ")[0].toLowerCase() == "!siirräjostain"){
