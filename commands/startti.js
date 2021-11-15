@@ -1,24 +1,16 @@
 const startti = (msg) => {
   let bussi1 = null
- // let bussi2 = null
   let bussi1Users = []
-  let bussi2Users = []
 
   msg.guild.channels.cache.forEach(channel => {
     if (channel.type == 'voice' && channel.name.toLowerCase() == "bussi 1") {
       bussi1 = channel
     }
-  /*  if (channel.type == 'voice' && channel.name.toLowerCase() == "bussi 2") {
-      bussi2 = channel
-    }*/
     if (channel.type == 'voice' && channel.name.toLowerCase() == "tuomiokirkko") {
       channel.members.forEach(member => {
         if (member.roles.cache.some(role => role.name.toLowerCase() == "bussi 1")) {
           bussi1Users.push(member)
         }
-       /* if (member.roles.cache.some(role => role.name.toLowerCase() == "bussi 2")) {
-          bussi2Users.push(member)
-        }*/
       })
     }
   })

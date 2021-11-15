@@ -1,14 +1,13 @@
 const Discord = require('discord.js')
-const speeddating = require("./speeddating")
+const speeddating = require("./commands/speeddating")
 const client = new Discord.Client()
-const startti = require("./startti")
+const startti = require("./commands/startti")
 require('dotenv').config()
-const roles = require("./roles")
-const moveFrom = require("./moveFrom")
-const info = require('./info')
-const roleByReaction = require('./roleByReaction')
-
-const moveChannel = require('./moveChannel')
+const roles = require("./commands/roles")
+const moveFrom = require("./commands/moveFrom")
+const info = require('./commands/info')
+const roleByReaction = require('./commands/roleByReaction')
+const moveChannel = require('./commands/moveChannel')
 
 global.inProgress = false
 global.previousPairs = []
